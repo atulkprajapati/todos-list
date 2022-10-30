@@ -1,15 +1,15 @@
 import './App.css';
 import Header from "./MyComponents/Header";
-import {Todos} from "./MyComponents/Todos";
-import {Footer} from "./MyComponents/Footer";
-import {AddToDo} from "./MyComponents/AddToDo";
-import {About} from "./MyComponents/About";
+import { Todos } from "./MyComponents/Todos";
+import { Footer } from "./MyComponents/Footer";
+import { AddToDo } from "./MyComponents/AddToDo";
+import { About } from "./MyComponents/About";
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   let initTodo;
-  if (localStorage.getItem("todos")===null) {
+  if (localStorage.getItem("todos") === null) {
     initTodo = [];
   }
   else {
@@ -18,7 +18,7 @@ function App() {
 
   const onDelete = (todo) => {
     setTodos(todos.filter((e) => {
-      return e!==todo;
+      return e !== todo;
     }))
     localStorage.setItem("todos", JSON.stringify(todos))
   }
@@ -30,12 +30,12 @@ function App() {
     } else {
       sno = todos[todos.length - 1].sno + 1;
     }
-      const myTodo = {
+    const myTodo = {
       sno: sno,
       title: title,
       desc: desc
     }
-    setTodos([...todos, myTodo])    
+    setTodos([...todos, myTodo])
   }
 
   const [todos, setTodos] = useState(initTodo);
@@ -45,22 +45,18 @@ function App() {
 
   return (
     <>
-      <Router forceRefresh={true}>
-        <Header title="MyTodosList" searchBar={true}/>
-        <Switch>
-          <Route exact path="/" render={()=>{
-            return(
-              <>
-                <AddToDo addToDo={addToDo}/>
-                <Todos todos={todos} onDelete={onDelete}/>
-              </>
-            )}}>
-          </Route>
-          <Route exact path="/about">
-            <About/>
-          </Route>
-        </Switch>
-        <Footer/>
+      <Router>
+        <Header title="MyToDosList" searchBar={true} />
+        <Routes>
+          <Route exact path="/" element={
+            <>
+              <AddToDo addToDo={addToDo} />
+              <Todos todos={todos} onDelete={onDelete} />
+            </>
+          } />
+          <Route exact path="/about" element={<About />} />
+        </Routes>
+        <Footer />
       </Router>
     </>
   );
